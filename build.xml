@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="run" name="Create Runnable Jar for Project URM">
+	
+	<path id="classpath">
+	        <fileset dir="lib" includes="**/*.jar"/>
+	</path>
+	
+	<target name="clean">
+			<delete dir="bin"/>
+			<delete dir="exe"/>
+	</target>
+	
+	<target name="compile">
+		<mkdir dir="bin"/>
+		<javac srcdir="src" destdir="bin" includeantruntime="false" classpathref="classpath"/>
+	</target>
+	
+    <!--this file was created by Eclipse Runnable JAR Export Wizard-->
+    <!--ANT 1.7 is required                                        -->
+    <target name="create_run_jar" depends="compile">
+    	<mkdir dir="bin"/>
+    	<mkdir dir="exe"/>
+        <jar destfile="exe/urm.jar" filesetmanifest="mergewithoutmain">
+            <manifest>
+                <attribute name="Main-Class" value="GUI.LoginView"/>
+                <attribute name="Class-Path" value="."/>
+            </manifest>
+            <fileset dir="bin"/>
+            <zipfileset excludes="META-INF/*.SF" src="lib/jcalendar-1.4.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="lib/jgoodies-common-1.2.0.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="lib/jgoodies-looks-2.4.1.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="lib/junit-4.6.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="lib/ojdbc14.jar"/>
+        </jar>
+    </target>
+	
+	<target name="run" depends="create_run_jar">
+			<java jar="exe/urm.jar" fork="true" />
+	</target>
+	
+	<target name="runtests" depends="compile">
+		<java fork="true" classname="junit.textui.TestRunner" taskname="junit" failonerror="true" classpathref="classpath">
+			<arg value="bin.Tests.AllTests"/>
+		</java>
+	</target>
+
+</project>
